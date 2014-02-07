@@ -7,17 +7,13 @@ Known to be used by [PyPy](http://speed.pypy.org), [Twisted](http://speed.twiste
 
 For an overview of some application concepts see the [wiki page](https://github.com/tobami/codespeed/wiki/Overview)
 
-# Requirements
+# Installation
 
-You will need Python 2.6+ and Django 1.3+ with South isodate and Tastypie.
+You will need Python 2.6 or 2.7.
 
-In Debian and Ubuntu, they can be installed with:
+To install dependencies and the codespeed Django app:
 
-    sudo apt-get install python-django python-django-south python-tastypie
-
-Instead of using distribution packages, you can use pip:
-
-    sudo pip install -r requirements.txt
+    pip install codespeed
 
 If you want version control integration, there are additional requirements:
 
@@ -30,19 +26,17 @@ If you want version control integration, there are additional requirements:
 Codespeed will try to clone the repo, which depending on the size of the project
 can take a long time. Please be patient.
 
-# Installation
-
 * Download the last stable release from
   [github.com/tobami/codespeed/tags](https://github.com/tobami/codespeed/tags), unpack it and install it with `python setup.py install`.
 * To get started, you can use the `sample_project` directory as a starting point for your Django project, which can be normally configured by editing `sample_project/settings.py`.
 * For simplicity, you can use the default sqlite configuration, which will save
-  the data to a database named `sample_project/data.db`
-* Create the DB by changing to the `sample_project/` directory and running:
+  the data to a database named `data.db`
+* Create the DB by typing from the root directory:
 
         python manage.py syncdb
 
 * Create an admin user in the process.
-* Migrate to the new DB Schema:
+* Execute DB migrations:
 
         python manage.py migrate
 
@@ -54,6 +48,7 @@ The codespeed installation can now be accessed by navigating to `http://localhos
 
 **Note**: for production, you should configure a real server like Apache or nginx (refer to the [Django docs](http://docs.djangoproject.com/en/dev/howto/deployment/)). You should also
 modify `sample_project/settings.py` and set `DEBUG = False`.
+[`sample_project/README.md`](https://github.com/tobami/codespeed/tree/master/sample_project/README.md) also describes some production settings.
 
 # Codespeed configuration
 
@@ -61,9 +56,9 @@ modify `sample_project/settings.py` and set `DEBUG = False`.
 
 If you want to test drive Codespeed, you can use the testdata.json fixtures to have a working data set to browse.
 
-* From the `sample_project/` directory, type:
+* From the root directory, type:
 
-        ./manage.py loaddata ../codespeed/fixtures/testdata.json
+        ./manage.py loaddata codespeed/fixtures/testdata.json
 
 ## Starting from scratch
 
@@ -104,8 +99,8 @@ section).
 
 ## Custom Settings
 
-You may override any of the default settings by creating the file
-`sample_project/override/settings.py`. It is strongly recommended that you only override the
+You may override any of the default settings by setting them in
+`sample_project/settings.py`. It is strongly recommended that you only override the
 settings you need by importing the default settings and replacing only the
 values needed for your customizations:
 
@@ -115,44 +110,45 @@ values needed for your customizations:
 
 ### Site-wide Changes
 
-All pages inherit from the `site_base.html` template, which
-extends `base.html`. To change every page on the site simply edit (`sample_project/templates/site_base.html`) which extends `base.html` and override
+All pages inherit from the `base.html` template. To change every page on the site 
+simply edit (`sample_project/templates/codespeed/base_site.html`) and override
 the appropriate block:
 
 * Custom title: you may replace the default "My Speed Center" for the title
   block with your prefered value:
 
-        {% block title}
+        {% block title %}
             My Project's Speed Center
         {% endblock %}
 
-* Custom logo: Place your logo in `sample_project/override/media/img` and add a block like
-  this:
+* Replacing logo.png: Place your logo in `sample_project/static/images/logo.png`
+* Logo with custom filename: Place your logo in `sample_project/static/images/` and add a block like
+  this to `base_site.html`:
 
         {% block logo %}
-            <img src="{{ MEDIA_URL }}override/img/my-logo.png" width="120" height="48" alt="My Project">
+            <img src="{{ MEDIA_URL }}images/my-logo.jpg" width="120" height="48" alt="My Project">
         {% endblock logo %}
 
   n.b. the layout will stay exactly the same for any image with a height of
   48px (any width will do)
 
-* Custom JavaScript or CSS: add your files to the `sample_project/override/media` directory
+* Custom JavaScript or CSS: add your files to the `sample_project/static/js` directory
   and extend the `extra_head` template block:
 
         {% block extra_head %}
             {{ block.super }}
-            <script type="text/javascript" src="{{ MEDIA_URL }}override/js/my_cool_tweaks.js">
+            <script type="text/javascript" src="{{ MEDIA_URL }}static/js/my_cool_tweaks.js">
         {% endblock extra_head %}
 
 ### Specific Pages
 
-Since `sample_project/override/templates` is the first entry in `settings.TEMPLATE_DIRS` you
+Since `sample_project/templates/codespeed` is the first entry in `settings.TEMPLATE_DIRS` you
 may override any template on the site simply by creating a new one with the
 same name.
 
-* About page: create `sample_project/override/templates/about.html`:
+* About page: create `sample_project/templates/about.html`:
 
-        {% extends "site_base.html" %}
+        {% extends "codespeed/base_site.html" %}
         {% block title %}{{ block.super }}: About this project{% endblock %}
         {% block body %}
             <div id="sidebar"></div>

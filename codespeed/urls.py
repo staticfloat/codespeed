@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, include, url
 from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView
 
@@ -28,5 +28,5 @@ urlpatterns += patterns('codespeed.views',
 urlpatterns += patterns('codespeed.views',
     # URLs for adding results
     (r'^result/add/json/$', 'add_json_results'),
-    (r'^result/add/$',      'add_result'),
+    (r'^result/add/$', 'add_result'),
 )

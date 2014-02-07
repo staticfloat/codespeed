@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import os
+import json
 
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.utils import simplejson as json
 from django.conf import settings
 
 from codespeed.github import GITHUB_URL_RE
@@ -96,9 +96,9 @@ class Revision(models.Model):
         if self.date is None:
             date = None
         else:
-            date = self.date.strftime("%h %d, %H:%M")
+            date = self.date.strftime("%b %d, %H:%M")
         string = " - ".join(filter(None, (date, self.commitid, self.tag)))
-        if self.branch.name != "default":
+        if self.branch.name != settings.DEF_BRANCH:
             string += " - " + self.branch.name
         return string
 

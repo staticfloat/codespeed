@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='codespeed',
-    version='0.9.1',
+    version='0.10.0',
     author='Miquel Torres',
     author_email='tobami@gmail.com',
     url='https://github.com/tobami/codespeed',
@@ -21,8 +21,9 @@ setup(
         'License :: OSI Approved :: GNU Lesser General Public License v2 (LGPLv2)',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
-        'Topic :: Internet :: WWW/HTTP',
+        'Topic :: Internet :: WWW/HTTP :: WSGI :: Application',
     ]
 )
